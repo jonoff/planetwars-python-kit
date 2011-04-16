@@ -15,7 +15,7 @@ class Planet(object):
         self.growth_rate = int(growth_rate)
 
     def __repr__(self):
-        return "<P(%d) #%d +%d>" % (self.id, self.ship_count, self.growth_rate)
+        return "<P(%d) #%d +%d O:%s $:%d>" % (self.id, self.ship_count, self.growth_rate, self.owner, self.turns_till_profit)
 
     def update(self, owner, ship_count):
         self.owner = PLAYER_MAP.get(int(owner))
@@ -39,9 +39,11 @@ class Planet(object):
 
     __sub__ = distance
 
-    def find_nearest_neighbor(self, owner=None, growth_rate=None):
+    def find_nearest_neighbor(self, owner=None, growth_rate=None, extra_condition=None):
         """Find the nearest planet that satisfies the given conditions"""
         candidates = self.universe.find_planets(owner=owner, growth_rate=growth_rate) - self
+        if extra_condition:
+            candidates = [c for c in candidates if extra_condition(c)]
         for planet in sorted(candidates, key=lambda p: p.distance(self)):
             return planet
         return None

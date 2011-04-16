@@ -22,7 +22,7 @@ def _make_id(*args):
 #noinspection PyUnusedLocal
 def timeout_handler(signal, frame):
     log.warning("Timeout reached!")
-    raise TimeIsUp
+    #raise TimeIsUp
 
 class TypedSetMeta(type):
     methods = (

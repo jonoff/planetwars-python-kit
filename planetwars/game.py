@@ -11,7 +11,7 @@ from planetwars.fleet import Fleet
 log = logging.getLogger(__name__)
 
 parser = OptionParser()
-parser.add_option("-l", "--log", dest="logfile", default=False,
+parser.add_option("-l", "--log", dest="logfile", default="GAME.log",
                   help="Activate logging. Write log entries to FILE", metavar="FILE")
 parser.add_option("--level", dest="loglevel", default="DEBUG", type="choice",
                   choices=["DEBUG", "INFO", "WARNING", "ERROR", "FATAL"],
@@ -46,7 +46,11 @@ class Game(object):
         self._fleets_to_send = {}
 
         if self.logging_enabled:
-            logging.basicConfig(filename=options.logfile, level=getattr(logging, options.loglevel), format="%(asctime)s %(levelname)s: %(message)s")
+            logging.basicConfig(filename=options.logfile, 
+                                filemode='w', 
+                                level=getattr(logging, options.loglevel), 
+                                format="%(asctime)s %(levelname)s: %(message)s",
+                                datefmt='%H:%M:%S',)
             
         log.info("----------- GAME START -----------")
 
@@ -93,7 +97,7 @@ class Game(object):
                         log.error("Exception in bot.do_turn()", exc_info=True)
                     if self.has_alarm and has_itimer:
                         signal.setitimer(signal.ITIMER_REAL, 0)
-                    log.info("### TURN END ### (time taken: %0.4f s)" % (time() - turn_start, ))
+                    log.info("### TURN END ### (time taken: %0.4f s)\n" % (time() - turn_start, ))
                     self.turn_done()
                 else:
                     self.universe.update(line)

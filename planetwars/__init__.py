@@ -26,6 +26,7 @@ from planet import Planet
 from universe import Universe
 from game import Game
 from basebot import BaseBot
+from attack import Attack
 
 __doc__ = """planetwars
 
